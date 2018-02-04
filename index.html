@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mqttDashboard</title>
+</head>
+<body>
+
+<div>
+    <h3>Connect</h3>
+    <select name="connections" id="connections_dropdown" onchange="load_connection()">
+        <option>New</option>
+    </select>
+    <form>
+        <label>
+            URL*: <input type="text" id="connect_url">
+        </label><br>
+        <label>
+            Port:<input type="text" id="connect_port">
+        </label><br>
+        <label>
+            User: <input type="text" id="connect_user">
+        </label><br>
+        <label>
+            Password: <input type="text" id="connect_password">
+        </label><br>
+    </form>
+    <button onclick="call_connect()">Connect</button>
+    <button onclick="save_connection()">Save</button>
+</div>
+
+<div>
+    <h3>Subscribe</h3>
+    <form>
+        <label>
+            Topic: <input type="text" id="subscribe_topic">
+        </label><br>
+    </form>
+    <button onclick="call_subscribe()">Subscribe</button>
+</div>
+
+
+<script src="libs/mqtt.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
