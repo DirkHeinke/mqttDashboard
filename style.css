@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  color: #333;
+}
+
+.connection-container {
+  /* background: yellow; */
+  width: 500px;
+  height: 500px;
+  display: flex;
+  border: 1px solid black;
+}
+
+.connection_new {
+  /* background: red; */
+  width: 50%;
+  height: 100%;
+  padding: 8px;
+  border-right: 1px solid black;
+}
+
+.connection_load {
+  /* background: pink; */
+  width: 50%;
+  height: 100%;
+  padding: 8px;
+}
+
+/************************
+* Saved connections
+*************************/
+#saved_connections .saved-connection {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+#saved_connections .saved-connection span {
+  flex-grow: 1;
+}
+
+
+/************************
+* FORMS
+*************************/
+.input-wrapper {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.input-wrapper label {
+  font-size: 0.75em;
+  color: darkgrey;
+  margin-bottom: 2px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  font-size: 1.25em;
+}
+
+/************************
+* GLOBALS
+*************************/
+.hidden {
+  display: none;
+}
