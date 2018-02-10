@@ -15,7 +15,7 @@ function loadConnections() {
         var tpl = `
             <div class="saved-connection">
                 <span class="">${connection.url}</span>
-                <button onclick="loadConnection(${id})">Load</button>
+                <button onclick="connect(${id})">Connect</button>
                 <button onclick="deleteSavedConnection(${id})">Delete</button>
             </div>
         `;
@@ -48,10 +48,15 @@ function emptyConnectionForm() {
     $('#create_connection')[0].reset()
 }
 
-function connect() {
-    connectionService.connect();
+function connect(id) {
+    connectionService.connect(id);
     emptyConnectionForm();
     loadConnections();
+    openDashboard();
+}
+
+function openDashboard() {
+  $('#dashboard').show();
 }
 
 loadConnections();

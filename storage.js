@@ -1,6 +1,7 @@
 var storageService = (function() {
   var STORAGE_KEYS = {
     CONNECTIONS: 'connections',
+    STATE: 'state',
     WIDGETS: 'widgets',
     DASHBOARDS: 'dashboards'
   };
@@ -25,6 +26,7 @@ var storageService = (function() {
     var connections = _get(STORAGE_KEYS.CONNECTIONS) || {};
     connections[id] = connection;
     _save(STORAGE_KEYS.CONNECTIONS, connections);
+    return id;
   }
 
   function getConnection(id) {
@@ -38,11 +40,23 @@ var storageService = (function() {
 
   function deleteConnection(id) {
     var connections = _get(STORAGE_KEYS.CONNECTIONS);
-    if(connections[id]) {
-      delete connections[id];
+    
+    if(!connections[id]) {
+      return;  
     }
-
+    
+    delete connections[id];
     _save(STORAGE_KEYS.CONNECTIONS, connections);
+  }
+
+  function setState(data) {
+    var current = getState() || {};
+    var newState = Object.assign(current, data);
+    _save(STORAGE_KEYS.STATE, newState);
+  }
+
+  function getState() {
+    return _get(STORAGE_KEYS.STATE);
   }
   
   return {
@@ -51,6 +65,10 @@ var storageService = (function() {
       getAll: getConnections,
       get: getConnection,
       delete: deleteConnection
+    },
+    state: {
+      get: getState,
+      set: setState
     }
   };
 })()
