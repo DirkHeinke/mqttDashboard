@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>mqttDashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 </head>
 <body>
 
-<div class="connection-container">
+<div class="connection-container hidden" id="connections-screen">
     <div class="connection_new">
         <h2>Create connection</h2>
         <form id="create_connection">
@@ -41,15 +42,73 @@
 </div>
 
 <!-- The actual dashboard page -->
-<div class="page hidden" id="dashboard">
-    <h1>Dashboard</h1>
+<div class="page" id="dashboard">
+    <div class="dashboard-top">
+        <h1>Dashboard</h1>
+        <div>Connection: <span id="connection-current"></span></div>
+        <button onclick="closeConnection()">Close connection</button>
+    </div>
+    <div class="dashboard-container">
+        <div class="dashboard-sidebar">
+            <!-- Dashboards -->
+            <h3>Saved Dashboards</h3>
+            <div id="dashboards-list"></div>
+            <button onclick="openDashboardCreateDialog()">ADD Dashboard</button>
+        </div>
+        <div class="dashboard-main">
+            <button onclick="openWidgetCreateDialog()">ADD WIDGET</button>
+            <div id="widgets-container">
+                <!-- Widgets go here -->
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<!-- Create Widget dialog -->
+<div id="dialog-widget-create" class="dialog hidden">
+    <div class="dialog-top">
+        <div class="dialog-title">Create Widget</div>
+        <div class="dialog-close"><button>Close</button></div>
+    </div>
+    <div class="dialog-body">
+        <form>
+            <select id="widget-type">
+                <option value="button" selected>Button</option>
+                <option value="2_button">2 Buttons</option>
+            </select>
+            <div class="form-container"></div>
+            <button class="dialog-save">Save</button>
+        </form>
+    </div>    
+</div>
+
+<!-- Create Dashboard dialog -->
+<div id="dialog-dashboard-create" class="dialog hidden">
+    <div class="dialog-top">
+        <div class="dialog-title">Create Dashboard</div>
+        <div class="dialog-close"><button>Close</button></div>
+    </div>
+    <div class="dialog-body">
+        <form>
+            <div class="input-wrapper">
+                <label>Dashboard Name</label>
+                <input type="text" id="dashboard-name">
+            </div>
+            <button class="dialog-save">Save</button>
+        </form>
+    </div>    
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
 <script src="libs/mqtt.js"></script>
-
+<script src="utils.js"></script>
 <script src="storage.js"></script>
 <script src="connection.js"></script>
+<script src="dialog.js"></script>
+<script src="widget.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

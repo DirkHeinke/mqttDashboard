@@ -53,21 +53,19 @@ var connectionService = (function(mqtt, storage) {
     mqttClient.on("connect", function (connack) {
       console.log("Connected!");
     });
-
-    mqttClient.on('message', function (topic, message) {
-      // message is Buffer
-      console.log(topic, message.toString())
-    })
   }
 
   function _addConnection(connection) {
     return storage.connections.save(connection);
   }
 
+  function getClient() {
+    return mqttClient;
+  }
+
   return {
     connect: connect,
-    // getConnections: getConnections,
-    // deleteConnection: deleteConnection
+    getClient: getClient
   };
 
 })(mqtt, storageService)
