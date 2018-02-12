@@ -1,102 +1,256 @@
-var mqttClient;
-//
-// connect("192.168.178.109", "9001", "dirk", "dirkdirk");
-
-show_saved_connections();
-
-function call_connect() {
-    var url = document.getElementById("connect_url").value;
-    var port = document.getElementById("connect_port").value;
-    var username = document.getElementById("connect_user").value;
-    var password = document.getElementById("connect_password").value;
-
-    connect(url, port, username, password);
-}
-
-function call_subscribe() {
-    var topic = document.getElementById("subscribe_topic").value;
-
-    subscribe(topic);
-}
-
-function save_connection() {
-    // TODO if selected in Dropdown, update -> button umbenennen?
-    var connection_parameters = {};
-    connection_parameters.url = document.getElementById("connect_url").value;
-    connection_parameters.port = document.getElementById("connect_port").value;
-    connection_parameters.username = document.getElementById("connect_user").value;
-    connection_parameters.password = document.getElementById("connect_password").value;
-
-    var connections = localStorage.getItem("connections");
-    if(!connections) {
-        connections = [];
-    } else {
-        connections = JSON.parse(connections);
+function loadConnections() {
+    var $connectionContainer = $('#saved_connections');
+    var items = $connectionContainer.find('.saved-connection');
+    var connections = storageService.connections.getAll();
+    
+    if(items.length > 0) {
+        $connectionContainer.empty();
     }
-    console.log(connections)
 
-    connections.push(connection_parameters);
-    localStorage.setItem("connections", JSON.stringify(connections));
-}
-
-function show_saved_connections() {
-    var connections = JSON.parse(localStorage.getItem("connections"));
-    if(!connections) {
-        return;
-    }
-    var selectItem = document.getElementById("connections_dropdown");
-
-    connections.forEach(function (entry, index) {
-        console.log(entry);
-        var option = document.createElement("option");
-        option.text = entry.url;
-        option.value = index;
-        selectItem.add(option);
+    Object.keys(connections).forEach(function (id) {
+        var connection = connections[id];
+        
+        var tpl = `
+            <div class="saved-connection">
+                <span class="">${connection.url}</span>
+                <button onclick="connect(${id})">Connect</button>
+                <button onclick="deleteSavedConnection(${id})">Delete</button>
+            </div>
+        `;
+        $connectionContainer.append(tpl);
     })
 }
 
-function load_connection() {
-    // Fill form with old data
-    var connections = JSON.parse(localStorage.getItem("connections"));
-    if(!connections) {
-        return;
+function loadConnection(id) {
+    var connection = storageService.connections.get(id);
+    var $form = $('#create_connection');
+    var $urlInput = $form.find('#connect_url');
+    var $portInput = $form.find('#connect_port');
+    var $userInput = $form.find('#connect_user');
+    var $passwordInput = $form.find('#connect_password');
+    var $checkbox = $form.find('#connect_save');
+    
+    $urlInput.val(connection.url);
+    $portInput.val(connection.port);
+    $userInput.val(connection.username);
+    $passwordInput.val(connection.password);
+    $checkbox.prop('checked', false);
+}
+
+function closeConnection() {
+  var state = { currentConnectionId: ''}
+  storageService.state.set(state);
+  closeDashboard();
+}
+
+function deleteSavedConnection(id) {
+    storageService.connections.delete(id);
+    loadConnections();
+}
+
+function emptyConnectionForm() {
+    $('#create_connection')[0].reset()
+}
+
+function connect(id) {
+    connectionService.connect(id);
+    emptyConnectionForm();
+    loadConnections();
+    loadDashboards();
+    openDashboard();
+    loadWidgets();
+    updateConnectionInTopBar();
+}
+
+function updateConnectionInTopBar() {
+  var state = storageService.state.get();
+  var currentConnectionId = state.currentConnectionId;
+  var currentConnection = storageService.connections.get(currentConnectionId); 
+  $('#connection-current').text(currentConnection.url);
+}
+
+function openDashboard() {
+  $('#connections-screen').hide();
+  $('#dashboard').show();
+}
+
+function closeDashboard() {
+  $('#dashboard').hide();
+  $('#connections-screen').css('display', 'flex');
+}
+
+function openWidgetCreateDialog() {
+  createWidgetDialog.open();
+}
+
+function saveWidget(widget) {
+  console.log('save widget', widget)
+  var widgetId = storageService.widgets.save(widget);
+  addWidgetToDashboard(widgetId);
+  loadWidgets();
+}
+
+function openDashboardCreateDialog() {
+  createDashboardDialog.open();
+}
+
+function saveDashboard() {
+  var name = $('#dashboard-name').val();
+
+  var dashboard = {
+    name: name,
+    widgets: []
+  };
+
+  var id = storageService.dashboards.save(dashboard);
+  loadDashboards();
+  activateDashboard(id);
+}
+
+function loadDashboards() {
+  console.log('Load Dashboards');
+  var dashboards = storageService.dashboards.getAll();
+  var state = storageService.state.get();
+  var currentDashboardId = state.currentDashboardId;
+  
+  var $dashboardsListContainer = $('#dashboards-list');
+  var items = $dashboardsListContainer.find('.dashboard');
+
+  if(items.length > 0) {
+    $dashboardsListContainer.empty();
+  }
+
+  Object.keys(dashboards).forEach(function(id) {
+    var dashboard = dashboards[id];
+    // var cls = id !== currentDashboardId ? 'hidden' : '';
+    var cls = 'hidden';
+    var tpl = `
+      <div class="dashboard">
+          <div class="dashboard-name">${dashboard.name}<span class="${cls}">ACTIVE</span></div>
+          <div class="dashboard-actions">
+              <button onclick="deleteDashboard(${id})">Delete</button>
+              <button onclick="activateDashboard(${id})">Load</button>
+          </div>
+      </div>
+    `;
+    $dashboardsListContainer.append(tpl);
+  });
+}
+
+function deleteDashboard(id) {
+  var dashboard = storageService.dashboards.get(id);
+  var widgetIds = dashboard.widgets;
+  widgetIds.forEach(function(id) {
+    storageService.widgets.delete(id);
+  });
+
+  storageService.dashboards.delete(id);
+  loadDashboards();
+
+  // Activate first dashboard
+  var dashboards = storageService.dashboards.getAll()
+  activateDashboard(parseInt(Object.keys(dashboards)[0]));
+}
+
+function activateDashboard(id) {
+  if(!id) {
+    return;
+  }
+
+  storageService.state.set({currentDashboardId: id});
+  var dashboard = storageService.dashboards.get(id);
+  $('#dashboard .dashboard-top h1').text(dashboard.name);
+  loadWidgets();
+}
+
+function getCurrentDashboardId() {
+  var state = storageService.state.get();
+  return state.currentDashboardId;
+}
+
+function addWidgetToDashboard(widgetId) {
+  var state = storageService.state.get();
+  var currentDashboardId = state.currentDashboardId;
+  var dashboard = storageService.dashboards.get(currentDashboardId);
+  
+  if(dashboard.widgets.includes(widgetId)) {
+    return;
+  }
+
+  dashboard.widgets.push(widgetId);
+  storageService.dashboards.update(currentDashboardId, dashboard);
+}
+
+function onWidgetRemove(widgetId, elemId) {
+  console.log('Remove', widgetId, elemId);
+  var state = storageService.state.get();
+  var currentDashboardId = state.currentDashboardId;
+  var dashboard = storageService.dashboards.get(currentDashboardId);
+
+  storageService.widgets.delete(widgetId)
+  
+  _.pull(dashboard.widgets, widgetId);
+  storageService.dashboards.update(currentDashboardId, dashboard);
+  
+  $(`#${elemId}`).remove();
+}
+
+function onWidgetSave() {
+  loadWidgets();
+}
+
+function getCurrentConnectionId() {
+  var state = storageService.state.get();
+  return state.currentConnectionId;
+}
+
+function loadWidgets() {
+  console.log('loadwidgets');
+  
+  var currentDashboardId = getCurrentDashboardId();
+  var dashboardWidgets = storageService.widgets.getByDashboardId(currentDashboardId);
+  var $widgetsContainer = $('#widgets-container');
+
+  if($widgetsContainer.find('.widget').length > 0) {
+    $widgetsContainer.empty();
+  }
+
+  Object.keys(dashboardWidgets).forEach(function(widgetId) {
+    new ButtonWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
+  });
+}
+
+
+
+
+
+
+// Init
+function init() {
+  loadConnections();
+  
+  var currentConnectionId = getCurrentConnectionId();
+  if(currentConnectionId) {
+    connect(currentConnectionId);
+    loadDashboards();
+
+    var currentDashboardId = getCurrentDashboardId();
+    if (currentDashboardId) {
+      activateDashboard(currentDashboardId);
     }
-    var value = document.getElementById("connections_dropdown").value;
-    if(value == "New") {
-        return;
-    }
 
-    document.getElementById("connect_url").value = connections[value].url;
-    document.getElementById("connect_port").value = connections[value].port;
-    document.getElementById("connect_user").value = connections[value].username;
-    document.getElementById("connect_password").value = connections[value].password;
+    loadWidgets();
+  } else {
+    closeDashboard();
+  }
 
+  
+
+  
 }
 
 
-function subscribe(topic) {
-    mqttClient.subscribe(topic);
-}
-
-function connect(url, port, username, password) {
-    if(mqttClient) {mqttClient.end();}
-    console.log("Connect");
-    mqttClient = mqtt("ws://" + url +":" + port + "/mqtt", {
-        "username": username,
-        "password": password
-    });
-
-
-    // mqttClient.subscribe("#");
-    // mqttClient.publish("/hi", "bla");
-
-    mqttClient.on("connect", function (connack) {
-        console.log("Connected!");
-    });
-
-    mqttClient.on('message', function (topic, message) {
-        // message is Buffer
-        console.log(topic, message.toString())
-    })
-}
+init();
+var createWidgetDialog = new WidgetCreateDialog('#dialog-widget-create', saveWidget);
+var createDashboardDialog = new DashboardCreateDialog('#dialog-dashboard-create', saveDashboard);
 
