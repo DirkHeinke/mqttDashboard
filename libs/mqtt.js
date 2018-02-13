@@ -276,7 +276,7 @@ MqttClient.prototype._setupStream = function () {
   this.stream.pipe(writable)
 
   // Suppress connection errors
-  this.stream.on('error', nop)
+  this.stream.on('error', nop);
 
   // Echo stream close
   eos(this.stream, this.emit.bind(this, 'close'))

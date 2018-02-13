@@ -31,6 +31,14 @@ body, html {
   padding: 8px;
 }
 
+.connection-error {
+  margin-top: 16px;
+  font-size: 1.5em;
+  color: #ffffff;
+  background: #de4141;
+  padding: 5px;
+}
+
 /************************
 * Saved connections
 *************************/

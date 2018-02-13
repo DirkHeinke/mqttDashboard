@@ -33,15 +33,16 @@ var connectionService = (function(mqtt, storage) {
   function _establishConnection(opts) {
     if (mqttClient) { mqttClient.end(); }
     console.log("Connect", opts);
-    
-    mqttClient = mqtt("ws://" + opts.url + ":" + opts.port + "/mqtt", {
-      "username": opts.username,
-      "password": opts.password
-    });
 
-    mqttClient.on("connect", function (connack) {
-      console.log("Connected!");
-    });
+    var options = {
+      reconnectPeriod: 0,
+      username: opts.username,
+      password: opts.password
+    };
+
+    var connectionString = `ws://${opts.url}:${opts.port}/mqtt`;
+    
+    mqttClient = mqtt(connectionString, options);
   }
 
   function _addConnection(connection) {

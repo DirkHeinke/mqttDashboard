@@ -77,13 +77,27 @@ function emptyConnectionForm() {
 }
 
 function connect(id) {
+    
     connectionService.connect(id);
-    emptyConnectionForm();
-    loadConnections();
-    loadDashboards();
-    openDashboard();
-    loadWidgets();
-    updateConnectionInTopBar();
+    var client = connectionService.getClient()
+    client.on('connect', function() {
+      console.log('[connect] Connection established');
+      hideConnectionError();
+      openDashboard();
+      loadWidgets();
+      updateConnectionInTopBar();
+      emptyConnectionForm();
+      loadConnections();
+      loadDashboards();
+    });
+
+    client.on('close', function(err) {
+      console.log('[connect] Connection failed');
+      showConnectionError();
+      storageService.state.set({
+        currentConnectionId: ""
+      });
+    });
 }
 
 function updateAndConnect(id) {
@@ -250,6 +264,16 @@ function loadWidgets() {
   });
 }
 
+function hideConnectionError() {
+  $('#connection_error').hide();
+}
+
+function showConnectionError() {
+  $('#connection_error')
+    .text('Could not connect to broker!')
+    .show();
+}
+
 function getConnectionFormValues() {
     var id = document.getElementById("connection_id").value;
     var url = document.getElementById("connect_url").value;
@@ -275,29 +299,24 @@ function getConnectionFormValues() {
 
 
 
-
 // Init
 function init() {
   loadConnections();
-  
+
   var currentConnectionId = getCurrentConnectionId();
-  if(currentConnectionId) {
-    connect(currentConnectionId);
-    loadDashboards();
-
-    var currentDashboardId = getCurrentDashboardId();
-    if (currentDashboardId) {
-      activateDashboard(currentDashboardId);
-    }
-
-    loadWidgets();
-  } else {
-    closeDashboard();
+  if(!currentConnectionId) {
+    return closeDashboard();
   }
 
-  
+  connect(currentConnectionId)
+  loadDashboards();
 
-  
+  var currentDashboardId = getCurrentDashboardId();
+  if (currentDashboardId) {
+    activateDashboard(currentDashboardId);
+  }
+
+  loadWidgets();
 }
 
 
