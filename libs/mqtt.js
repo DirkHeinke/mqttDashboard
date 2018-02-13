@@ -222,8 +222,7 @@ function MqttClient (streamBuilder, options) {
   })
 
   // Setup reconnect timer on disconnect
-  // Disabled by @EggiJan
-  // this.on('close', this._setupReconnect)
+  this.on('close', this._setupReconnect)
 
   events.EventEmitter.call(this)
 
