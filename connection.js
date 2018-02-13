@@ -18,24 +18,13 @@ var connectionService = (function(mqtt, storage) {
       return;
     }
 
-    var url = document.getElementById("connect_url").value;
-    var port = document.getElementById("connect_port").value;
-    var username = document.getElementById("connect_user").value;
-    var password = document.getElementById("connect_password").value;
-    var saveConnection = document.getElementById("connect_save").checked;
+    var formData = getConnectionFormValues();
 
-    var connectionOptions = {
-      url: url,
-      port: port,
-      username: username,
-      password: password
-    };
-
-    if (saveConnection) {
-      newConnectionId = _addConnection(connectionOptions);
+    if (formData.saveConnection) {
+      newConnectionId = _addConnection(formData.connectionOptions);
     }
 
-    _establishConnection(connectionOptions);
+    _establishConnection(formData.connectionOptions);
     storageService.state.set({
       currentConnectionId: newConnectionId 
     });

@@ -98,6 +98,19 @@ var storageService = (function(_) {
     _save(STORAGE_KEYS.DASHBOARDS, dashboards);
   }
 
+  function updateConnection(id, data) {
+    var connections = _get(STORAGE_KEYS.CONNECTIONS);
+
+    if(!connections[id]) {
+        return;
+    }
+
+    var updatedConnection = Object.assign(connections[id], data);
+    connections[id] = updatedConnection;
+    _save(STORAGE_KEYS.CONNECTIONS, connections);
+    return updatedConnection;
+  }
+
   function updateDashboard(id, data) {
     var dashboards = _get(STORAGE_KEYS.DASHBOARDS);
 
@@ -148,7 +161,8 @@ var storageService = (function(_) {
       save: saveConnection,
       getAll: getConnections,
       get: getConnection,
-      delete: deleteConnection
+      delete: deleteConnection,
+      update: updateConnection
     },
     state: {
       get: getState,
