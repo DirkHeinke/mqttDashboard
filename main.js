@@ -59,7 +59,7 @@ function editSavedConnection(id) {
     $('#button_updateAndConnect').show();
 
     // disable save checkbox
-    $('#create_connection').find('#connect_save').prop("disabled", true);
+    $('#create_connection').find('#connect_save').prop('disabled', true);
 }
 
 

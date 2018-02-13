@@ -99,17 +99,16 @@ var storageService = (function(_) {
   }
 
   function updateConnection(id, data) {
-    console.log("jo",id, data)
     var connections = _get(STORAGE_KEYS.CONNECTIONS);
 
     if(!connections[id]) {
         return;
     }
 
-    var updatedConnections = Object.assign(connections[id], data);
-    connections[id] = updatedConnections;
+    var updatedConnection = Object.assign(connections[id], data);
+    connections[id] = updatedConnection;
     _save(STORAGE_KEYS.CONNECTIONS, connections);
-    return updatedConnections;
+    return updatedConnection;
   }
 
   function updateDashboard(id, data) {
