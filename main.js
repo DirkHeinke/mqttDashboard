@@ -15,6 +15,7 @@ function loadConnections() {
                 <span class="">${connection.url}</span>
                 <button onclick="connect(${id})">Connect</button>
                 <button onclick="deleteSavedConnection(${id})">Delete</button>
+                <button onclick="editSavedConnection(${id})">Edit</button>
             </div>
         `;
         $connectionContainer.append(tpl);
@@ -29,11 +30,13 @@ function loadConnection(id) {
     var $userInput = $form.find('#connect_user');
     var $passwordInput = $form.find('#connect_password');
     var $checkbox = $form.find('#connect_save');
+    var $connectionIdInput = $form.find('#connection_id');
     
     $urlInput.val(connection.url);
     $portInput.val(connection.port);
     $userInput.val(connection.username);
     $passwordInput.val(connection.password);
+    $connectionIdInput.val(id);
     $checkbox.prop('checked', false);
 }
 
@@ -48,6 +51,19 @@ function deleteSavedConnection(id) {
     loadConnections();
 }
 
+function editSavedConnection(id) {
+    loadConnection(id);
+
+    // rename button connect -> update & connect
+    $('#button_connect').hide();
+    $('#button_updateAndConnect').show();
+
+    // disable save checkbox
+    $('#create_connection').find('#connect_save').prop("disabled", true);
+}
+
+
+
 function emptyConnectionForm() {
     $('#create_connection')[0].reset()
 }
@@ -60,6 +76,12 @@ function connect(id) {
     openDashboard();
     loadWidgets();
     updateConnectionInTopBar();
+}
+
+function updateAndConnect(id) {
+    var formData = getConnectionFormValues();
+    storageService.connections.update(formData.id, formData.connectionOptions);
+    connect(formData.id);
 }
 
 function updateConnectionInTopBar() {
@@ -220,6 +242,27 @@ function loadWidgets() {
   });
 }
 
+function getConnectionFormValues() {
+    var id = document.getElementById("connection_id").value;
+    var url = document.getElementById("connect_url").value;
+    var port = document.getElementById("connect_port").value;
+    var username = document.getElementById("connect_user").value;
+    var password = document.getElementById("connect_password").value;
+    var saveConnection = document.getElementById("connect_save").checked;
+
+    var formData = {
+        id: id,
+        saveConnection: saveConnection,
+        connectionOptions: {
+            url: url,
+            port: port,
+            username: username,
+            password: password
+        }
+    };
+
+    return formData;
+}
 
 
 

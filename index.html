@@ -12,6 +12,7 @@
     <div class="connection_new">
         <h2>Create connection</h2>
         <form id="create_connection">
+            <input type="hidden" id="connection_id">
             <div class="input-wrapper">
                 <label for="connect_url">Connection Url</label>
                 <input type="text" id="connect_url">
@@ -33,7 +34,8 @@
                 <input type="checkbox" id="connect_save" checked>
             </div>
         </form>
-        <button onclick="connect()">Connect</button>
+        <button onclick="connect()" id="button_connect">Connect</button>
+        <button onclick="updateAndConnect()" id="button_updateAndConnect" class="hidden">Update & Connect</button>
     </div>
     <div class="connection_load">
         <h2>Saved connections</h2>
