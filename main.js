@@ -81,7 +81,8 @@ function emptyConnectionForm() {
 function connect(id) {
     
     connectionService.connect(id);
-    var client = connectionService.getClient()
+    var client = connectionService.getClient();
+    loadConnections();
     client.on('connect', function() {
       console.log('[connect] Connection established');
       hideConnectionError();
