@@ -222,7 +222,8 @@ function MqttClient (streamBuilder, options) {
   })
 
   // Setup reconnect timer on disconnect
-  this.on('close', this._setupReconnect)
+  // Disabled by @EggiJan
+  // this.on('close', this._setupReconnect)
 
   events.EventEmitter.call(this)
 
@@ -275,8 +276,7 @@ MqttClient.prototype._setupStream = function () {
 
   this.stream.pipe(writable)
 
-  // Suppress connection errors
-  this.stream.on('error', nop)
+  this.stream.on('error', this.emit.bind(this, 'error'));
 
   // Echo stream close
   eos(this.stream, this.emit.bind(this, 'close'))

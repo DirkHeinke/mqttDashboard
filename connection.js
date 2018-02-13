@@ -38,10 +38,6 @@ var connectionService = (function(mqtt, storage) {
       "username": opts.username,
       "password": opts.password
     });
-
-    mqttClient.on("connect", function (connack) {
-      console.log("Connected!");
-    });
   }
 
   function _addConnection(connection) {
