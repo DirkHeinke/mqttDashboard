@@ -68,6 +68,7 @@ function cancelUpdateConnection() {
   $('#button_connect').show();
   $('#button_updateAndConnect').hide();
   $('#button_updateCancel').hide();
+  $('#create_connection').find('#connect_save').prop('disabled', false);
 }
 
 
@@ -104,6 +105,8 @@ function updateAndConnect(id) {
     var formData = getConnectionFormValues();
     storageService.connections.update(formData.id, formData.connectionOptions);
     connect(formData.id);
+
+    $('#create_connection').find('#connect_save').prop('disabled', false);
 }
 
 function updateConnectionInTopBar() {
