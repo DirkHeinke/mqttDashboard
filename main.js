@@ -57,9 +57,17 @@ function editSavedConnection(id) {
     // rename button connect -> update & connect
     $('#button_connect').hide();
     $('#button_updateAndConnect').show();
+    $('#button_updateCancel').show();
 
     // disable save checkbox
     $('#create_connection').find('#connect_save').prop('disabled', true);
+}
+
+function cancelUpdateConnection() {
+  emptyConnectionForm();
+  $('#button_connect').show();
+  $('#button_updateAndConnect').hide();
+  $('#button_updateCancel').hide();
 }
 
 
