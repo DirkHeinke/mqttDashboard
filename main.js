@@ -83,7 +83,7 @@ function connect(id) {
       loadDashboards();
     });
 
-    client.on('error', function(err) {
+    client.on('close', function(err) {
       console.log('[connect] Connection failed');
       showConnectionError();
       storageService.state.set({
