@@ -102,13 +102,16 @@ var storageService = (function(_) {
     var connections = _get(STORAGE_KEYS.CONNECTIONS);
 
     if(!connections[id]) {
-        return;
+      var newId = saveConnection(data);
+      return connections[newId];
     }
 
     var updatedConnection = Object.assign(connections[id], data);
     connections[id] = updatedConnection;
     _save(STORAGE_KEYS.CONNECTIONS, connections);
     return updatedConnection;
+
+
   }
 
   function updateDashboard(id, data) {

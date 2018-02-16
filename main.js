@@ -68,18 +68,21 @@ function cancelUpdateConnection() {
   $('#button_connect').show();
   $('#button_updateAndConnect').hide();
   $('#button_updateCancel').hide();
+  $('#create_connection').find('#connect_save').prop('disabled', false);
 }
 
 
 
 function emptyConnectionForm() {
-    $('#create_connection')[0].reset()
+    $('#create_connection')[0].reset();
+    $('#connection_id').val("");
 }
 
 function connect(id) {
     
     connectionService.connect(id);
-    var client = connectionService.getClient()
+    var client = connectionService.getClient();
+    loadConnections();
     client.on('connect', function() {
       console.log('[connect] Connection established');
       hideConnectionError();
@@ -103,6 +106,8 @@ function connect(id) {
 function updateAndConnect(id) {
     var formData = getConnectionFormValues();
     storageService.connections.update(formData.id, formData.connectionOptions);
+
+    cancelUpdateConnection();
     connect(formData.id);
 }
 
