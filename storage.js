@@ -102,8 +102,8 @@ var storageService = (function(_) {
     var connections = _get(STORAGE_KEYS.CONNECTIONS);
 
     if(!connections[id]) {
-      saveConnection(data);
-      return;
+      var newId = saveConnection(data);
+      return connections[newId];
     } else {
       var updatedConnection = Object.assign(connections[id], data);
       connections[id] = updatedConnection;
