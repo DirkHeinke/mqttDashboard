@@ -104,12 +104,12 @@ var storageService = (function(_) {
     if(!connections[id]) {
       var newId = saveConnection(data);
       return connections[newId];
-    } else {
-      var updatedConnection = Object.assign(connections[id], data);
-      connections[id] = updatedConnection;
-      _save(STORAGE_KEYS.CONNECTIONS, connections);
-      return updatedConnection;
     }
+
+    var updatedConnection = Object.assign(connections[id], data);
+    connections[id] = updatedConnection;
+    _save(STORAGE_KEYS.CONNECTIONS, connections);
+    return updatedConnection;
 
 
   }
