@@ -69,6 +69,20 @@ function WidgetCreateDialog (id, saveFn) {
         propName: 'btnLabel2',
         cls: 'widget-btn-label-2'
       }
+    ],
+    'subscriptionList': [
+        {
+          type: 'text',
+          label: 'Widget Title',
+          propName: 'title',
+          cls: 'widget-name'
+        },
+        {
+          type: 'text',
+          label: 'Topic',
+          propName: 'topic',
+          cls: 'widget-topic'
+        }
     ]
   }
 

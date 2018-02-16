@@ -123,6 +123,11 @@ body, html {
   padding: 8px;
 }
 
+.widget__scrollable .widget-body{
+  height: 200px;
+  overflow: auto;
+}
+
 
 /************************
 * Dialogs
