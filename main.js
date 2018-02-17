@@ -1,16 +1,16 @@
 function loadConnections() {
-    var $connectionContainer = $('#saved_connections');
-    var items = $connectionContainer.find('.saved-connection');
-    var connections = storageService.connections.getAll();
-    
-    if(items.length > 0) {
-        $connectionContainer.empty();
-    }
+  var $connectionContainer = $('#saved_connections');
+  var items = $connectionContainer.find('.saved-connection');
+  var connections = storageService.connections.getAll();
 
-    Object.keys(connections).forEach(function (id) {
-        var connection = connections[id];
-        
-        var tpl = `
+  if(items.length > 0) {
+    $connectionContainer.empty();
+  }
+
+  Object.keys(connections).forEach(function(id) {
+    var connection = connections[id];
+
+    var tpl = `
             <div class="saved-connection">
                 <span class="">${connection.url}</span>
                 <button onclick="connect(${id})">Connect</button>
@@ -18,49 +18,49 @@ function loadConnections() {
                 <button onclick="editSavedConnection(${id})">Edit</button>
             </div>
         `;
-        $connectionContainer.append(tpl);
-    })
+    $connectionContainer.append(tpl);
+  })
 }
 
 function loadConnection(id) {
-    var connection = storageService.connections.get(id);
-    var $form = $('#create_connection');
-    var $urlInput = $form.find('#connect_url');
-    var $portInput = $form.find('#connect_port');
-    var $userInput = $form.find('#connect_user');
-    var $passwordInput = $form.find('#connect_password');
-    var $checkbox = $form.find('#connect_save');
-    var $connectionIdInput = $form.find('#connection_id');
-    
-    $urlInput.val(connection.url);
-    $portInput.val(connection.port);
-    $userInput.val(connection.username);
-    $passwordInput.val(connection.password);
-    $connectionIdInput.val(id);
-    $checkbox.prop('checked', false);
+  var connection = storageService.connections.get(id);
+  var $form = $('#create_connection');
+  var $urlInput = $form.find('#connect_url');
+  var $portInput = $form.find('#connect_port');
+  var $userInput = $form.find('#connect_user');
+  var $passwordInput = $form.find('#connect_password');
+  var $checkbox = $form.find('#connect_save');
+  var $connectionIdInput = $form.find('#connection_id');
+
+  $urlInput.val(connection.url);
+  $portInput.val(connection.port);
+  $userInput.val(connection.username);
+  $passwordInput.val(connection.password);
+  $connectionIdInput.val(id);
+  $checkbox.prop('checked', false);
 }
 
 function closeConnection() {
-  var state = { currentConnectionId: ''}
+  var state = {currentConnectionId: ''}
   storageService.state.set(state);
   closeDashboard();
 }
 
 function deleteSavedConnection(id) {
-    storageService.connections.delete(id);
-    loadConnections();
+  storageService.connections.delete(id);
+  loadConnections();
 }
 
 function editSavedConnection(id) {
-    loadConnection(id);
+  loadConnection(id);
 
-    // rename button connect -> update & connect
-    $('#button_connect').hide();
-    $('#button_updateAndConnect').show();
-    $('#button_updateCancel').show();
+  // rename button connect -> update & connect
+  $('#button_connect').hide();
+  $('#button_updateAndConnect').show();
+  $('#button_updateCancel').show();
 
-    // disable save checkbox
-    $('#create_connection').find('#connect_save').prop('disabled', true);
+  // disable save checkbox
+  $('#create_connection').find('#connect_save').prop('disabled', true);
 }
 
 function cancelUpdateConnection() {
@@ -72,49 +72,48 @@ function cancelUpdateConnection() {
 }
 
 
-
 function emptyConnectionForm() {
-    $('#create_connection')[0].reset();
-    $('#connection_id').val("");
+  $('#create_connection')[0].reset();
+  $('#connection_id').val("");
 }
 
 function connect(id) {
-    
-    connectionService.connect(id);
-    var client = connectionService.getClient();
-    loadConnections();
-    client.on('connect', function() {
-      console.log('[connect] Connection established');
-      hideConnectionError();
-      openDashboard();
-      loadWidgets();
-      updateConnectionInTopBar();
-      emptyConnectionForm();
-      loadConnections();
-      loadDashboards();
-    });
 
-    client.on('close', function(err) {
-      console.log('[connect] Connection failed');
-      showConnectionError();
-      storageService.state.set({
-        currentConnectionId: ""
-      });
+  connectionService.connect(id);
+  var client = connectionService.getClient();
+  loadConnections();
+  client.on('connect', function() {
+    console.log('[connect] Connection established');
+    hideConnectionError();
+    openDashboard();
+    // loadWidgets();
+    updateConnectionInTopBar();
+    emptyConnectionForm();
+    loadConnections();
+    loadDashboards();
+  });
+
+  client.on('close', function(err) {
+    console.log('[connect] Connection failed');
+    showConnectionError();
+    storageService.state.set({
+      currentConnectionId: ""
     });
+  });
 }
 
 function updateAndConnect(id) {
-    var formData = getConnectionFormValues();
-    storageService.connections.update(formData.id, formData.connectionOptions);
+  var formData = getConnectionFormValues();
+  storageService.connections.update(formData.id, formData.connectionOptions);
 
-    cancelUpdateConnection();
-    connect(formData.id);
+  cancelUpdateConnection();
+  connect(formData.id);
 }
 
 function updateConnectionInTopBar() {
   var state = storageService.state.get();
   var currentConnectionId = state.currentConnectionId;
-  var currentConnection = storageService.connections.get(currentConnectionId); 
+  var currentConnection = storageService.connections.get(currentConnectionId);
   $('#connection-current').text(currentConnection.url);
 }
 
@@ -161,7 +160,7 @@ function loadDashboards() {
   var dashboards = storageService.dashboards.getAll();
   var state = storageService.state.get();
   var currentDashboardId = state.currentDashboardId;
-  
+
   var $dashboardsListContainer = $('#dashboards-list');
   var items = $dashboardsListContainer.find('.dashboard');
 
@@ -221,7 +220,7 @@ function addWidgetToDashboard(widgetId) {
   var state = storageService.state.get();
   var currentDashboardId = state.currentDashboardId;
   var dashboard = storageService.dashboards.get(currentDashboardId);
-  
+
   if(dashboard.widgets.includes(widgetId)) {
     return;
   }
@@ -237,10 +236,10 @@ function onWidgetRemove(widgetId, elemId) {
   var dashboard = storageService.dashboards.get(currentDashboardId);
 
   storageService.widgets.delete(widgetId)
-  
+
   _.pull(dashboard.widgets, widgetId);
   storageService.dashboards.update(currentDashboardId, dashboard);
-  
+
   $(`#${elemId}`).remove();
 }
 
@@ -255,7 +254,7 @@ function getCurrentConnectionId() {
 
 function loadWidgets() {
   console.log('loadwidgets');
-  
+
   var currentDashboardId = getCurrentDashboardId();
   var dashboardWidgets = storageService.widgets.getByDashboardId(currentDashboardId);
   var $widgetsContainer = $('#widgets-container');
@@ -265,7 +264,19 @@ function loadWidgets() {
   }
 
   Object.keys(dashboardWidgets).forEach(function(widgetId) {
-    new ButtonWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
+    var type = dashboardWidgets[widgetId].type;
+    switch(type) {
+      case 'button':
+        new ButtonWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
+        break;
+      case 'subscriptionList':
+        new SubscriptionListWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
+        break;
+      default:
+        console.error("Unknown Widget type not loaded");
+    }
+
+
   });
 }
 
@@ -280,28 +291,26 @@ function showConnectionError() {
 }
 
 function getConnectionFormValues() {
-    var id = document.getElementById("connection_id").value;
-    var url = document.getElementById("connect_url").value;
-    var port = document.getElementById("connect_port").value;
-    var username = document.getElementById("connect_user").value;
-    var password = document.getElementById("connect_password").value;
-    var saveConnection = document.getElementById("connect_save").checked;
+  var id = document.getElementById("connection_id").value;
+  var url = document.getElementById("connect_url").value;
+  var port = document.getElementById("connect_port").value;
+  var username = document.getElementById("connect_user").value;
+  var password = document.getElementById("connect_password").value;
+  var saveConnection = document.getElementById("connect_save").checked;
 
-    var formData = {
-        id: id,
-        saveConnection: saveConnection,
-        connectionOptions: {
-            url: url,
-            port: port,
-            username: username,
-            password: password
-        }
-    };
+  var formData = {
+    id: id,
+    saveConnection: saveConnection,
+    connectionOptions: {
+      url: url,
+      port: port,
+      username: username,
+      password: password
+    }
+  };
 
-    return formData;
+  return formData;
 }
-
-
 
 
 // Init
@@ -317,11 +326,12 @@ function init() {
   loadDashboards();
 
   var currentDashboardId = getCurrentDashboardId();
-  if (currentDashboardId) {
+  if(currentDashboardId) {
     activateDashboard(currentDashboardId);
   }
 
-  loadWidgets();
+  // loadWidgets();
+  // this can be removed?
 }
 
 
