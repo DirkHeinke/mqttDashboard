@@ -87,6 +87,7 @@ body, html {
   /* background: pink; */
   flex-grow: 1;
   padding: 16px;
+  width: calc(100% - 400px);
 }
 
 /************************
@@ -123,12 +124,31 @@ body, html {
   padding: 8px;
 }
 
-.widget__scrollable .widget-body{
+.widget__scrollable .widget-body {
   height: 200px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
+.widget h3 {
+  margin: 0;
+  margin-bottom: 16px;
+}
 
+.widget__scrollable ul.msg-container {
+  flex-grow: 1;
+  background: #000000;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  color: lime;
+  font-size: 0.875em;
+}
+
+.widget__scrollable ul.msg-container li {
+  margin-bottom: 5px;
+}
 /************************
 * Dialogs
 *************************/
