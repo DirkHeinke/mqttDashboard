@@ -153,32 +153,33 @@ function SubscriptionListWidget(parentElem, id, saveCb, deleteCb) {
     this.mqttClient = connectionService.getClient();
 
     this.mqttClient.subscribe(topic);
-    this.mqttClient.on('message', function(topic, msg) {
-      msg = msg.toString();
-      console.log('on message', topic, msg);
-      var $container = $(`#widget_${this.id}`).find('.msg-container');
-      $container.prepend(`<li>${topic}: ${msg}</li>`);
-
-    }.bind(this));
+    this.mqttClient.on('message', this.handleMessage.bind(this));
     console.log('subListWidget init --> Subscribe topic', topic);
   };
 
+  this.handleMessage = function(topic, msg) {
+    var message = msg.toString();
+    var $container = this.$widget.find('.msg-container');
+    $container.prepend(`<li>[${topic}] ${message}</li>`);
+  }
+
   this.render = function() {
+
+    // Render widget to DOM
     this.widgetData = storageService.widgets.get(this.id);
     var elem = this.tpl.format(this.id, this.widgetData.title);
-
     this.$widgetsContainer.append(elem);
-    var $widget = $(`#widget_${this.id}`);
-    var $widgetBody = $widget.find('.widget-body');
-    var $widgetBack = $widget.find('.widget-back');
-    this.$widget = $widget;
+    this.$widget = $(`#widget_${this.id}`);
+
+    var $widgetBody = this.$widget.find('.widget-body');
+    var $widgetBack = this.$widget.find('.widget-back');
     this.$widgetBack = $widgetBack;
     this.$widgetBody = $widgetBody;
 
-    var $saveBtn = $widget.find('.widget-back .widget-save');
-    var $editBtn = $widget.find('.widget-edit');
-    var $cancelBtn = $widget.find('.widget-cancel');
-    var $deleteBtn = $widget.find('.widget-delete');
+    var $saveBtn = this.$widget.find('.widget-back .widget-save');
+    var $editBtn = this.$widget.find('.widget-edit');
+    var $cancelBtn = this.$widget.find('.widget-cancel');
+    var $deleteBtn = this.$widget.find('.widget-delete');
 
     $saveBtn.on('click', this.save.bind(this));
     $editBtn.on('click', this.editMode.bind(this));
