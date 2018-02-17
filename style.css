@@ -139,7 +139,7 @@ body, html {
   flex-grow: 1;
   background: #000000;
   margin: 0;
-  padding: 0;
+  padding: 8px;
   overflow-y: auto;
   list-style: none;
   color: lime;
