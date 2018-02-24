@@ -315,6 +315,7 @@ function getConnectionFormValues() {
 
 function toggleSidebar() {
   $('#dashboard .dashboard-sidebar').toggleClass('isClosed');
+  $('#dashboard .sidebar-inner').toggleClass('isClosed');
 }
 
 
