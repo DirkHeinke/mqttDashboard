@@ -67,7 +67,7 @@ body, html {
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background: #ccc;
+  background: #e8e8e8;
 }
 
 #dashboard .dashboard-container {
@@ -76,7 +76,7 @@ body, html {
 }
 
 #dashboard .dashboard-sidebar {
-  background: #ccc;
+  background: #e8e8e8;
   border-right: 1px solid black;
   position: relative;
   max-width: 400px;
@@ -112,7 +112,7 @@ body, html {
 
 #dashboard .dashboard-sidebar.isClosed {
   width: 0;
-  padding-right: 36px;
+  padding-right: 42px;
 }
 
 #dashboard .dashboard-sidebar span.fa {
@@ -268,18 +268,69 @@ body, html {
 
 button {
   padding: 9px 16px;
-  background: #0c5bb8;
-  color: white;
   text-transform: uppercase;
-  font-weight: bold;
   border: none;
   cursor: pointer;
   margin-right: 5px;
+  outline: none;
 }
 
 button:hover {
+  background: #a8a8a8;
+}
+
+/**
+* Primary blue button
+*/
+button.btn-primary {
+  background: #0c5bb8;
+  color: white;
+  font-weight: bold;
+}
+
+button.btn-primary:hover {
   background: #3b7cc9;
 }
+
+button.btn-secondary {
+  background: #0caab8;
+  color: white;
+  font-weight: bold;
+}
+
+button.btn-secondary:hover {
+  background: #3bc9c1;
+}
+
+/**
+* Button with icon and text
+*/
+button.btn-icon-before i {
+  margin-right: 5px;
+}
+
+button.btn-icon-after i {
+  margin-right: 5px;
+}
+
+button.btn-icon {
+  background: transparent;
+  font-size: 1.5em;
+  color: #474747;
+  padding: 0;
+}
+
+button.btn-icon:hover {
+  color: gray;
+}
+
+.btn-icon.btn-icon__inverted {
+  color: white;
+}
+
+
+
+
 /************************
 * GLOBALS
 *************************/

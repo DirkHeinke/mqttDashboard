@@ -16,8 +16,8 @@ class SubscriptionListWidget extends Widget {
         <div class="widget-title">
             <div class="widget-name">{1}</div>
             <div class="widget-actions">
-                <button class="widget-edit">Edit</button>
-                <button class="widget-delete">Delete</button>
+                <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
+                <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
             </div>
         </div>
         <div class="widget-body">

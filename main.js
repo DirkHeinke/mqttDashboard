@@ -13,9 +13,9 @@ function loadConnections() {
     var tpl = `
             <div class="saved-connection">
                 <span class="">${connection.url}</span>
-                <button onclick="connect(${id})">Connect</button>
-                <button onclick="deleteSavedConnection(${id})">Delete</button>
-                <button onclick="editSavedConnection(${id})">Edit</button>
+                <button onclick="deleteSavedConnection(${id})" class="btn-icon" title="delete"><i class="fas fa-trash"></i></button>
+                <button onclick="editSavedConnection(${id})" class="btn-icon" title="edit"><i class="far fa-edit"></i></button>
+                <button onclick="connect(${id})" class="btn-icon" title="connect"><i class="fas fa-arrow-circle-right"></i></button>
             </div>
         `;
     $connectionContainer.append(tpl);
@@ -176,8 +176,8 @@ function loadDashboards() {
       <div class="dashboard">
           <div class="dashboard-name">${dashboard.name}<span class="${cls}">ACTIVE</span></div>
           <div class="dashboard-actions">
-              <button onclick="deleteDashboard(${id})">Delete</button>
-              <button onclick="activateDashboard(${id})">Load</button>
+              <button onclick="deleteDashboard(${id})" class="btn-icon" title="edit"><i class="far fa-edit"></i></button>
+              <button onclick="activateDashboard(${id})" class="btn-icon" title="load"><i class="fas fa-arrow-circle-right"></i></button>
           </div>
       </div>
     `;
