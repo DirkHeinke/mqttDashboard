@@ -71,23 +71,56 @@ body, html {
 }
 
 #dashboard .dashboard-container {
-  /* background: green; */
   display: flex;
   height: 100%;
 }
 
 #dashboard .dashboard-sidebar {
-  width: 400px;
+  flex-grow: 1;
   background: #ccc;
-  padding: 16px;
   border-right: 1px solid black;
+  position: relative;
+  transition: all .3s;
+  max-width: 400px;
 }
 
 #dashboard .dashboard-main {
-  /* background: pink; */
-  flex-grow: 1;
+  flex-grow: 9;
   padding: 16px;
   width: calc(100% - 400px);
+}
+
+#dashboard .sidebar-inner {
+  padding: 16px;
+}
+
+#sidebar-toggle {
+  cursor: pointer;
+  padding: 5px;
+  font-size: 2em;
+  position: absolute;
+  right: 0;
+}
+
+#sidebar-toggle:hover {
+  color: #5a5a5a;
+}
+
+#dashboard .dashboard-sidebar.isClosed {
+  flex-grow: 0;
+  padding-right: 36px;
+}
+
+#dashboard .dashboard-sidebar.isClosed .sidebar-inner {
+  display: none;
+}
+
+#dashboard .dashboard-sidebar span.fa {
+  transition: all .2s;
+}
+
+#dashboard .dashboard-sidebar.isClosed span.fa {
+  transform: rotate(180deg);
 }
 
 /************************
@@ -102,7 +135,7 @@ body, html {
 }
 
 .widget {
-  width: 80%;
+  width: 90%;
   background: lightgray;
   border: 1px solid;
   display: flex;

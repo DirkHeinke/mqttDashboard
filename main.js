@@ -313,6 +313,11 @@ function getConnectionFormValues() {
 }
 
 
+function toggleSidebar() {
+  $('#dashboard .dashboard-sidebar').toggleClass('isClosed');
+}
+
+
 // Init
 function init() {
   loadConnections();
@@ -330,8 +335,7 @@ function init() {
     activateDashboard(currentDashboardId);
   }
 
-  // loadWidgets();
-  // this can be removed?
+  $('#sidebar-toggle').on('click', toggleSidebar);
 }
 
 
