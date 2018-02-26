@@ -51,6 +51,14 @@ class SubscriptionListWidget extends Widget {
 
   handleMessage(topic, msg) {
     var message = msg.toString();
+
+    var subscribedTopic = this.widgetData.topic;
+
+    var regex = new RegExp(subscribedTopic.replace("\\+", "[^/]+").replace("#", ".+"));
+    if(!regex.test(topic)) {
+      return;
+    }
+
     var timeNow = new Date().toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'});
     this.$messageContainer.prepend(`<div class="msg"><div class="topic">Topic: "${topic}"</div><div class="time">${timeNow}</div><div class="payload">${message}</div></div>`);
   }
