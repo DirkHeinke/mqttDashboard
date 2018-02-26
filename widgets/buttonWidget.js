@@ -16,12 +16,12 @@ class ButtonWidget extends Widget {
         <div class="widget-title">
           <div class="widget-name">{1}</div>
           <div class="widget-actions">
-            <button class="widget-edit">Edit</button>
-            <button class="widget-delete">Delete</button>
+            <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
+            <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
           </div>
         </div>
         <div class="widget-body">
-          <button>{2}</button>
+          <button class="btn-secondary">{2}</button>
         </div>
         <div class="widget-back hidden">
           <form id="widget_{0}_back">
@@ -41,8 +41,8 @@ class ButtonWidget extends Widget {
               <label>Topic</label>
               <input type="text" id="widget_{0}_topic">
             </div>
-            <button class="widget-save">Save</button>
-            <button class="widget-cancel">Cancel</button>
+            <button class="widget-save btn-primary">Save</button>
+            <button class="widget-cancel btn-primary">Cancel</button>
           </form>
         </div>
       </div>`;

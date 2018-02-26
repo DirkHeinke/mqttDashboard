@@ -16,13 +16,13 @@ class SubscriptionListWidget extends Widget {
         <div class="widget-title">
             <div class="widget-name">{1}</div>
             <div class="widget-actions">
-                <button class="widget-edit">Edit</button>
-                <button class="widget-delete">Delete</button>
+                <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
+                <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
             </div>
         </div>
         <div class="widget-body">
             <h3>Messages</h3>
-            <ul class="msg-container"></ul>
+            <div class="msg-container"></div>
         </div>
         <div class="widget-back hidden">
             <form id="widget_{0}_back">
@@ -51,6 +51,7 @@ class SubscriptionListWidget extends Widget {
 
   handleMessage(topic, msg) {
     var message = msg.toString();
-    this.$messageContainer.prepend(`<li>[${topic}] ${message}</li>`);
+    var timeNow = new Date().toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'});
+    this.$messageContainer.prepend(`<div class="msg"><div class="topic">Topic: "${topic}"</div><div class="time">${timeNow}</div><div class="payload">${message}</div></div>`);
   }
 }
