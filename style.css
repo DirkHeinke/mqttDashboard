@@ -293,13 +293,13 @@ button.btn-primary:hover {
 }
 
 button.btn-secondary {
-  background: #0caab8;
+  background: #98B209;
   color: white;
   font-weight: bold;
 }
 
 button.btn-secondary:hover {
-  background: #3bc9c1;
+  background: #AFCC14;
 }
 
 /**
