@@ -51,6 +51,12 @@ body, html {
   flex-grow: 1;
 }
 
+#connections-screen #github-startpage-link {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
 /************************
 * Dashboard
 *************************/
@@ -121,6 +127,12 @@ body, html {
 
 #dashboard .dashboard-sidebar.isClosed span.fa {
   transform: rotate(180deg);
+}
+
+.dashboard-sidebar #github-dashboard-link {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
 }
 
 /************************
