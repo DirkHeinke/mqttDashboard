@@ -176,7 +176,7 @@ function loadDashboards() {
       <div class="dashboard">
           <div class="dashboard-name">${dashboard.name}<span class="${cls}">ACTIVE</span></div>
           <div class="dashboard-actions">
-              <button onclick="deleteDashboard(${id})" class="btn-icon" title="edit"><i class="far fa-edit"></i></button>
+              <button onclick="deleteDashboard(${id})" class="btn-icon" title="delete"><i class="fas fa-trash"></i></button>
               <button onclick="activateDashboard(${id})" class="btn-icon" title="load"><i class="fas fa-arrow-circle-right"></i></button>
           </div>
       </div>
