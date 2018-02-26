@@ -168,19 +168,23 @@ body, html {
   margin-bottom: 16px;
 }
 
-.widget__scrollable ul.msg-container {
-  flex-grow: 1;
+.widget__scrollable div.msg-container {
   background: #000000;
-  margin: 0;
   padding: 8px;
   overflow-y: auto;
-  list-style: none;
-  color: lime;
+  color: #98B209;
   font-size: 0.875em;
 }
 
-.widget__scrollable ul.msg-container li {
-  margin-bottom: 5px;
+.widget__scrollable .msg-container .msg {
+  display: grid;
+  grid-template-columns: 90% 10%;
+  padding-bottom: 10px;
+}
+
+.widget__scrollable .msg-container .msg .payload {
+  color: #AFCC14;
+  font-size: 1.2em;
 }
 /************************
 * Dialogs
