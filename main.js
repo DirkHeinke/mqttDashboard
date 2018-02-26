@@ -272,6 +272,9 @@ function loadWidgets() {
       case 'subscriptionList':
         new SubscriptionListWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
         break;
+      case 'textInput':
+        new TextInputWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
+        break;
       default:
         console.error("Unknown Widget type not loaded");
     }

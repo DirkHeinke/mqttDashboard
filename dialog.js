@@ -83,6 +83,20 @@ function WidgetCreateDialog (id, saveFn) {
           propName: 'topic',
           cls: 'widget-topic'
         }
+    ],
+    'textInput': [
+      {
+        type: 'text',
+        label: 'Widget Title',
+        propName: 'title',
+        cls: 'widget-name'
+      },
+      {
+        type: 'text',
+        label: 'Topic',
+        propName: 'topic',
+        cls: 'widget-topic'
+      }
     ]
   }
 
