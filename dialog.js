@@ -86,6 +86,11 @@ function WidgetCreateDialog (id, saveFn) {
     ]
   }
 
+  this.open = function() {
+    this.$elem.show();
+    this.onTypeChange();
+  }
+
   this.init = function () {
     var $widgetTypeSelect = $(id).find('#widget-type');
     this.$widgetTypeSelect = $widgetTypeSelect;
