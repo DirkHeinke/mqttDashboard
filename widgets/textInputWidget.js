@@ -50,7 +50,7 @@ class TextInputWidget extends Widget {
   sendMessage(ev) {
     ev.preventDefault();
 
-    var message = this.$widgetBody.find('input')[0].value;
+    var message = this.$widgetBody.find('input').val();
     this.mqttClient.publish(this.widgetData.topic, message);
   }
 
