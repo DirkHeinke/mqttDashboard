@@ -54,7 +54,7 @@ body, html {
 #connections-screen #github-startpage-link {
   position: absolute;
   bottom: 0px;
-  left: 0px;
+  left: 8px;
 }
 
 /************************
@@ -132,7 +132,7 @@ body, html {
 .dashboard-sidebar #github-dashboard-link {
   position: absolute;
   bottom: 0px;
-  left: 0px;
+  left: 8px;
 }
 
 /************************
