@@ -55,7 +55,6 @@ class SubscriptionListWidget extends Widget {
     var subscribedTopic = this.widgetData.topic;
 
     if(!this.matches(subscribedTopic, topic)) {
-      console.log("removed", topic, subscribedTopic)
       return;
     }
 
