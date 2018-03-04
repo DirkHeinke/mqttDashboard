@@ -21,7 +21,9 @@ class TextInputWidget extends Widget {
           </div>
         </div>
         <div class="widget-body">
-          <input class="text-input" id="widget_{0}_text">
+          <div class="input-wrapper">
+            <input id="widget_{0}_text">
+          </div>
           <button class="btn-secondary">Send</button>
         </div>
         <div class="widget-back hidden">
