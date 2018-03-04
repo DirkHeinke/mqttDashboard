@@ -39,6 +39,12 @@ body, html {
   padding: 5px;
 }
 
+#github-link {
+  position: absolute;
+  bottom: 0px;
+  left: 8px;
+}
+
 /************************
 * Saved connections
 *************************/
@@ -51,11 +57,6 @@ body, html {
   flex-grow: 1;
 }
 
-#connections-screen #github-startpage-link {
-  position: absolute;
-  bottom: 0px;
-  left: 8px;
-}
 
 /************************
 * Dashboard
@@ -127,12 +128,6 @@ body, html {
 
 #dashboard .dashboard-sidebar.isClosed span.fa {
   transform: rotate(180deg);
-}
-
-.dashboard-sidebar #github-dashboard-link {
-  position: absolute;
-  bottom: 0px;
-  left: 8px;
 }
 
 /************************
