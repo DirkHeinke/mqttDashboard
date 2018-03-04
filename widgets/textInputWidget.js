@@ -16,13 +16,15 @@ class TextInputWidget extends Widget {
         <div class="widget-title">
           <div class="widget-name">{1}</div>
           <div class="widget-actions">
-            <button class="widget-edit">Edit</button>
-            <button class="widget-delete">Delete</button>
+            <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
+            <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
           </div>
         </div>
         <div class="widget-body">
-          <input id="widget_{0}_text">
-          <button>Send</button>
+          <div class="input-wrapper">
+            <input id="widget_{0}_text">
+          </div>
+          <button class="btn-secondary">Send</button>
         </div>
         <div class="widget-back hidden">
           <form id="widget_{0}_back">
@@ -54,5 +56,5 @@ class TextInputWidget extends Widget {
     this.mqttClient.publish(this.widgetData.topic, message);
   }
 
-  
+
 }
