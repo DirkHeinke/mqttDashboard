@@ -78,6 +78,14 @@ function emptyConnectionForm() {
 }
 
 function connect(id) {
+  if(!id) {
+    var formData = getConnectionFormValues();
+    if(!formData.connectionOptions.url || !formData.connectionOptions.port) {
+      showConnectionError("Provide URL and Port");
+      return;
+    }
+  }
+
 
   connectionService.connect(id);
   var client = connectionService.getClient();
@@ -95,7 +103,7 @@ function connect(id) {
 
   client.on('close', function(err) {
     console.log('[connect] Connection failed');
-    showConnectionError();
+    showConnectionError('Could not connect to broker!');
     storageService.state.set({
       currentConnectionId: ""
     });
@@ -287,9 +295,9 @@ function hideConnectionError() {
   $('#connection_error').hide();
 }
 
-function showConnectionError() {
+function showConnectionError(text) {
   $('#connection_error')
-    .text('Could not connect to broker!')
+    .text(text)
     .show();
 }
 
