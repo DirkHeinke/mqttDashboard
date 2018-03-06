@@ -11,6 +11,11 @@ body, html {
   font-family: 'Roboto', sans-serif;
 }
 
+#start-container {
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
 .connection-container {
   width: 100%;
   height: 500px;
