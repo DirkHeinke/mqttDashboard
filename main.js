@@ -118,13 +118,13 @@ function updateConnectionInTopBar() {
 }
 
 function openDashboard() {
-  $('#connections-screen').hide();
+  $('#start-container').hide();
   $('#dashboard').show();
 }
 
 function closeDashboard() {
   $('#dashboard').hide();
-  $('#connections-screen').css('display', 'flex');
+  $('#start-container').show();
 }
 
 function openWidgetCreateDialog() {

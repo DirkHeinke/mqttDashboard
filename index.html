@@ -9,7 +9,14 @@
 </head>
 <body>
 
-<div class="connection-container hidden" id="connections-screen">
+<div class="hidden" id="start-container">
+
+    <h1>MQTT Dashboard</h1>
+    <p>With this page you can connect to your mqtt broker via websockets. After the connection is established, you can create dashboards and add widgets to them.
+        There are widgets for subscribing to topics and widgets for sending strings to topics via buttons.
+        Connections and Dashboards are saved in local storage and are available after reopening this page.</p>
+    <div class="connection-container" id="connections-screen">
+
     <div class="connection_new">
         <h2>Create connection</h2>
         <form id="create_connection">
@@ -48,7 +55,7 @@
     </div>
     <div id="github-link">Code on: <a href="https://github.com/DirkHeinke/mqttDashboard">GitHub</a> </div>
 </div>
-
+</div>
 <!-- The actual dashboard page -->
 <div class="page" id="dashboard">
     <div class="dashboard-top">
