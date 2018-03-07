@@ -324,6 +324,8 @@ function toggleSidebar() {
 
 // Init
 function init() {
+  $('#sidebar-toggle').on('click', toggleSidebar);
+  
   loadConnections();
 
   var currentConnectionId = getCurrentConnectionId();
@@ -339,7 +341,7 @@ function init() {
     activateDashboard(currentDashboardId);
   }
 
-  $('#sidebar-toggle').on('click', toggleSidebar);
+  
 }
 
 
