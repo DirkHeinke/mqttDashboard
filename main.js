@@ -153,6 +153,10 @@ function openDashboardCreateDialog() {
 function saveDashboard() {
   var name = $('#dashboard-name').val();
 
+  createDashboard(name);
+}
+
+function createDashboard(name) {
   var dashboard = {
     name: name,
     widgets: []
@@ -166,6 +170,11 @@ function saveDashboard() {
 function loadDashboards() {
   console.log('Load Dashboards');
   var dashboards = storageService.dashboards.getAll();
+  if(Object.keys(dashboards).length === 0) {
+    createDashboard("Default");
+    loadDashboards();
+    return;
+  }
   var state = storageService.state.get();
   var currentDashboardId = state.currentDashboardId;
 
