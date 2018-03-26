@@ -162,7 +162,7 @@ function createDashboard(name) {
 function loadDashboards() {
   console.log('Load Dashboards');
   var dashboards = storageService.dashboards.getAll();
-  if(Object.keys(dashboards).length == 0) {
+  if(Object.keys(dashboards).length === 0) {
     createDashboard("Default");
     loadDashboards();
     return;
