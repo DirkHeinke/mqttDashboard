@@ -40,8 +40,8 @@ var connectionService = (function(mqtt, storage) {
       password: opts.password
     };
 
-    var connectionString = `ws://${opts.url}:${opts.port}/mqtt`;
-    
+    var protocol = opts.ssl ? 'wss' : 'ws';
+    var connectionString = `${protocol}://${opts.url}`;
     mqttClient = mqtt(connectionString, options);
   }
 

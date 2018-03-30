@@ -12,8 +12,7 @@ function loadConnections() {
 
   if(Object.keys(connections).length === 0) {
     // no connection, add default
-    console.log("Adding default connection")
-    storageService.connections.save({url: "broker.mqttdashboard.com", port: "8000", username: "", password: ""})
+    storageService.connections.save({url: "broker.mqttdashboard.com:8000/mqtt", username: "", password: ""})
     connections = storageService.connections.getAll();
   }
 
@@ -36,25 +35,25 @@ function loadConnection(id) {
   var connection = storageService.connections.get(id);
   var $form = $('#create_connection');
   var $urlInput = $form.find('#connect_url');
-  var $portInput = $form.find('#connect_port');
   var $userInput = $form.find('#connect_user');
   var $passwordInput = $form.find('#connect_password');
   var $checkbox = $form.find('#connect_save');
+  var $ssl = $form.find('#connect_secure');
   var $connectionIdInput = $form.find('#connection_id');
 
   $urlInput.val(connection.url);
-  $portInput.val(connection.port);
   $userInput.val(connection.username);
   $passwordInput.val(connection.password);
   $connectionIdInput.val(id);
   $checkbox.prop('checked', false);
+  $ssl.prop('checked', connection.ssl);
 }
 
 function closeConnection() {
-  connectionService.getClient().end();
-  var state = {currentConnectionId: ''}
-  storageService.state.set(state);
-  closeDashboard();
+  connectionService.getClient().end(true, function() {
+    console.log('[connect] close');
+  });
+  
 }
 
 function deleteSavedConnection(id) {
@@ -91,7 +90,7 @@ function emptyConnectionForm() {
 function connect(id) {
   if(!id) {
     var formData = getConnectionFormValues();
-    if(!formData.connectionOptions.url || !formData.connectionOptions.port) {
+    if(!formData.connectionOptions.url) {
       showConnectionError("Provide URL and Port");
       return;
     }
@@ -129,8 +128,15 @@ function connect(id) {
     storageService.state.set({
       currentConnectionId: ""
     });
-  })
+  });
 
+  client.on('end', function() {
+    console.log('[connect] on end')
+    var state = { currentConnectionId: '', currentDashboardId: '' };
+    storageService.state.set(state);
+    closeDashboard();
+    clearWidgets();
+  });
 }
 
 function updateAndConnect(id) {
@@ -227,6 +233,11 @@ function loadDashboards() {
     `;
     $dashboardsListContainer.append(tpl);
   });
+
+  if (!currentDashboardId) {
+    var id = Object.keys(dashboards)[0];
+    activateDashboard(id);
+  }
 }
 
 function deleteDashboard(id) {
@@ -241,7 +252,7 @@ function deleteDashboard(id) {
 
   // Activate first dashboard
   var dashboards = storageService.dashboards.getAll()
-  activateDashboard(parseInt(Object.keys(dashboards)[0]));
+  activateDashboard(Object.keys(dashboards)[0]);
 }
 
 function activateDashboard(id) {
@@ -249,7 +260,7 @@ function activateDashboard(id) {
     return;
   }
 
-  storageService.state.set({currentDashboardId: id});
+  storageService.state.set({currentDashboardId: parseInt(id)});
   var dashboard = storageService.dashboards.get(id);
   $('#dashboard .dashboard-top h1').text(dashboard.name);
   loadWidgets();
@@ -345,19 +356,19 @@ function showConnectionError(text) {
 function getConnectionFormValues() {
   var id = document.getElementById("connection_id").value;
   var url = document.getElementById("connect_url").value;
-  var port = document.getElementById("connect_port").value;
   var username = document.getElementById("connect_user").value;
   var password = document.getElementById("connect_password").value;
   var saveConnection = document.getElementById("connect_save").checked;
+  var ssl = document.getElementById("connect_secure").checked;
 
   var formData = {
     id: id,
     saveConnection: saveConnection,
     connectionOptions: {
       url: url,
-      port: port,
       username: username,
-      password: password
+      password: password,
+      ssl: ssl
     }
   };
 

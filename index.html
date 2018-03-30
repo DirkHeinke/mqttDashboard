@@ -22,12 +22,8 @@
         <form id="create_connection">
             <input type="hidden" id="connection_id">
             <div class="input-wrapper">
-                <label for="connect_url">Connection Url</label>
-                <input type="text" id="connect_url">
-            </div>
-            <div class="input-wrapper">
-                <label for="connect_port">Port</label>
-                <input type="text" id="connect_port">
+                <label for="connect_url">Connection String</label>
+                <input type="text" id="connect_url" placeholder="broker.mqttdashboard.com:8000/mqtt">
             </div>
             <div class="input-wrapper">
                 <label for="connect_user">Username</label>
@@ -40,6 +36,10 @@
             <div class="input-wrapper">
                 <label for="connect_save">Save connection</label>
                 <input type="checkbox" id="connect_save" checked>
+            </div>
+            <div class="input-wrapper">
+                <label for="connect_secure">SSL</label>
+                <input type="checkbox" id="connect_secure">
             </div>
         </form>
         <button onclick="connect()" id="button_connect" class="btn-primary">Connect</button>
