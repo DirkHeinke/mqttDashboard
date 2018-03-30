@@ -1,6 +1,5 @@
 class DashboardCreateDialog extends Dialog {
   constructor(id, onSave) {
-    console.log('init dashboard dialog');
     super(id);
     this.onSave = onSave;
     

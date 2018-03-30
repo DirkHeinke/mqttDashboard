@@ -1,17 +1,25 @@
-class TextInputWidget extends Widget {
-  constructor(parentElement, id, saveCb, deleteCb) {
-    super(parentElement, id, saveCb, deleteCb);
-    this.parent = parent;
-    this.id = id;
-    this.widgetData = storageService.widgets.get(this.id);
-    this.init();
+var _textInputWidgetForm = [
+  {
+    type: 'text',
+    label: 'Widget Title',
+    propName: 'title',
+    cls: 'widget-name'
+  },
+  {
+    type: 'text',
+    label: 'Topic',
+    propName: 'topic',
+    cls: 'widget-topic'
   }
+];
 
-  init() {
-    var data = this.widgetData;
-    var widgetId = this.id;
-
-    var tpl = `
+class TextInputWidget extends Widget {
+  constructor(parentElement, widgetId, widgetData, deleteCb, editCb) {
+    super(parentElement, widgetId, deleteCb, editCb);
+    this.parent = parent;
+    this.widgetId = widgetId;
+    this.widgetData = widgetData;
+    this.tpl = `
       <div class="widget" id="widget_{0}">
         <div class="widget-title">
           <div class="widget-name">{1}</div>
@@ -26,25 +34,28 @@ class TextInputWidget extends Widget {
           </div>
           <button class="btn-secondary">Send</button>
         </div>
-        <div class="widget-back hidden">
-          <form id="widget_{0}_back">
-            <div class="input-wrapper">
-              <label>Widget Name</label>
-              <input type="text" id="widget_{0}_name">
-            </div>
-            <div class="input-wrapper">
-              <label>Topic</label>
-              <input type="text" id="widget_{0}_topic">
-            </div>
-            <button class="widget-save">Save</button>
-            <button class="widget-cancel">Cancel</button>
-          </form>
-        </div>
       </div>`;
 
-    // Order of items in array is important
-    super.render(tpl, [widgetId, data.title, data.btnLabel]);
+    this.init();
+  }
 
+  static get form() { return _textInputWidgetForm };
+
+  init() {
+    var data = this.widgetData;
+
+    // Order of items in array is important
+    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel]);
+    this._setButtonHandler();
+  }
+
+  refresh(data) {
+    this.widgetData = data;
+    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel], { refresh: true });
+    this._setButtonHandler();
+  }
+
+  _setButtonHandler() {
     var $btn = this.$widget.find('.widget-body > button');
     $btn.on('click', this.sendMessage.bind(this));
   }

@@ -1,53 +1,52 @@
 class Widget {
-  constructor(parentElem, id, saveCb, deleteCb) {
+  constructor(parentElem, widgetId, deleteCb, editCb) {
     this.$widgetsContainer = parentElem;
-    this.saveCb = saveCb;
     this.deleteCb = deleteCb;
+    this.editCb = editCb;
+    this.widgetId = widgetId;
     this.mqttClient = connectionService.getClient();
   }
 
-  render(tpl, substitutes) {
+  render(tpl, substitutes, opts) {
+    var opts = opts || {};
     var elem = tpl.format(...substitutes);
-    this.$widgetsContainer.append(elem);
-    this.$widget = $(`#widget_${this.id}`);
-  
+    
+
+    if(opts.refresh && this.$widget) {
+      this._replaceElement(elem);
+    } else {
+      this._appendElement(elem)
+    }
+
+    this.$widget = $(`#widget_${this.widgetId}`);
     this.$widgetBody = this.$widget.find('.widget-body');
-    this.$widgetBack = this.$widget.find('.widget-back');
-  
-    var $saveBtn = this.$widget.find('.widget-back .widget-save');
-    var $editBtn = this.$widget.find('.widget-edit');
-    var $cancelBtn = this.$widget.find('.widget-cancel');
-    var $deleteBtn = this.$widget.find('.widget-delete');
-  
-    $saveBtn.on('click', this.save.bind(this));
-    $editBtn.on('click', this.enableEditMode.bind(this));
-    $cancelBtn.on('click', this.closeEditMode.bind(this));
+    this._setEventHandler(this.$widget);
+  }
+
+  _appendElement(elem) {
+    this.$widgetsContainer.append(elem);
+  }
+
+  _replaceElement(elem) {
+    this.$widget.replaceWith(elem);
+  }
+
+  _setEventHandler($widget) {
+    var $editBtn = $widget.find('.widget-edit');
+    var $deleteBtn = $widget.find('.widget-delete');
+
+    $editBtn.on('click', this.edit.bind(this));
     $deleteBtn.on('click', this.delete.bind(this));
   }
 
-  enableEditMode() {
-    this.$widgetBody.hide();
-    this.$widgetBack.show();
-  
-    // TODO: Load and show widget data
-  }
-
-  closeEditMode(ev) {
+  edit(ev) {
     ev.preventDefault();
-    console.log('close edit mode')
-    this.$widgetBody.show();
-    this.$widgetBack.hide();
+    this.editCb(this.widgetId);
   }
 
   delete() {
     var widgetElemId = this.$widget.attr('id');
-    this.deleteCb(this.id, widgetElemId);
-  }
-
-  save(ev) {
-    ev.preventDefault();
-    console.log('WIDGET SAVE');
-    this.saveCb();
+    this.deleteCb(this.widgetId, widgetElemId);
   }
 
 }
