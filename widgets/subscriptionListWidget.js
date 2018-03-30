@@ -39,8 +39,15 @@ class SubscriptionListWidget extends Widget {
   static get form() { return _subscriptionListWidgetForm };
 
   refresh(data) {
+    var oldTopic = this.widgetData.topic;
+    var newTopic = data.topic
+    var topicChanged = newTopic !== oldTopic;
+
     this.widgetData = data;
     super.render(this.tpl, [this.widgetId, data.title, data.btnLabel], { refresh: true });
+    if(topicChanged) {
+      this._subscribe(newTopic);
+    }
   }
 
   init() {
@@ -48,14 +55,21 @@ class SubscriptionListWidget extends Widget {
 
     // Order of items in array is important
     super.render(this.tpl, [this.widgetId, data.title, data.btnLabel]);
-
-    this.$messageContainer = this.$widget.find('.msg-container');
-
-    this.mqttClient.subscribe(data.topic);
-    this.mqttClient.on('message', this.handleMessage.bind(this));
+    this._subscribe(data.topic);
+    this._setupMessageHandler();
   }
 
+  _subscribe(topic) {
+    this.mqttClient.subscribe(topic);
+  }
+
+  _setupMessageHandler() {
+    this.mqttClient.on('message', this.handleMessage.bind(this));
+  }
+  
+
   handleMessage(topic, msg) {
+    var $messageContainer = this.$widget.find('.msg-container');
     var message = msg.toString();
 
     var subscribedTopic = this.widgetData.topic;
@@ -65,7 +79,7 @@ class SubscriptionListWidget extends Widget {
     }
 
     var timeNow = new Date().toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'});
-    this.$messageContainer.prepend(`<div class="msg"><div class="topic">Topic: "${topic}"</div><div class="time">${timeNow}</div><div class="payload">${message}</div></div>`);
+    $messageContainer.prepend(`<div class="msg"><div class="topic">Topic: "${topic}"</div><div class="time">${timeNow}</div><div class="payload">${message}</div></div>`);
   }
 
   /**
