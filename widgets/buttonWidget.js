@@ -1,17 +1,38 @@
-class ButtonWidget extends Widget {
-  constructor(parentElement, id, saveCb, deleteCb) {
-    super(parentElement, id, saveCb, deleteCb);
-    this.parent = parent;
-    this.id = id;
-    this.widgetData = storageService.widgets.get(this.id);
-    this.init();
+var _buttonWidgetForm = [
+  {
+    type: 'text',
+    label: 'Widget Title',
+    propName: 'title',
+    cls: 'widget-name'
+  },
+  {
+    type: 'text',
+    label: 'Button Label',
+    propName: 'btnLabel',
+    cls: 'widget-btn-label'
+  },
+  {
+    type: 'text',
+    label: 'Button Value',
+    propName: 'btnValue',
+    cls: 'widget-btn-value'
+  },
+  {
+    type: 'text',
+    label: 'Topic',
+    propName: 'topic',
+    cls: 'widget-topic'
   }
+];
 
-  init() {
-    var data = this.widgetData;
-    var widgetId = this.id;
+class ButtonWidget extends Widget {
+  constructor(parentElement, widgetId, widgetData, deleteCb, editCb) {
+    super(parentElement, widgetId, deleteCb, editCb);
+    this.parent = parent;
+    this.widgetId = widgetId;
+    this.widgetData = widgetData;
 
-    var tpl = `
+    this.tpl = `
       <div class="widget" id="widget_{0}">
         <div class="widget-title">
           <div class="widget-name">{1}</div>
@@ -23,33 +44,27 @@ class ButtonWidget extends Widget {
         <div class="widget-body">
           <button class="btn-secondary">{2}</button>
         </div>
-        <div class="widget-back hidden">
-          <form id="widget_{0}_back">
-            <div class="input-wrapper">
-              <label>Widget Name</label>
-              <input type="text" id="widget_{0}_name">
-            </div>
-            <div class="input-wrapper">
-              <label>Button Label</label>
-              <input type="text" id="widget_{0}_label">
-              </div>
-            <div class="input-wrapper">
-              <label>Button Value</label>
-              <input type="text" id="widget_{0}_value">
-            </div>
-            <div class="input-wrapper">
-              <label>Topic</label>
-              <input type="text" id="widget_{0}_topic">
-            </div>
-            <button class="widget-save btn-primary">Save</button>
-            <button class="widget-cancel btn-primary">Cancel</button>
-          </form>
-        </div>
       </div>`;
+    
+    this.init();
+  }
+  static get form() { return _buttonWidgetForm };
 
+  refresh(data) {
+    this.widgetData = data;
+    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel], { refresh: true });
+    this._setButtonHandler();
+  }
+  
+  init() {
+    var data = this.widgetData;
+    
     // Order of items in array is important
-    super.render(tpl, [widgetId, data.title, data.btnLabel]);
+    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel]);
+    this._setButtonHandler();
+  }
 
+  _setButtonHandler() {
     var $btn = this.$widget.find('.widget-body > button');
     $btn.on('click', this.sendMessage.bind(this));
   }
@@ -58,6 +73,4 @@ class ButtonWidget extends Widget {
     ev.preventDefault();
     this.mqttClient.publish(this.widgetData.topic, this.widgetData.btnValue);
   }
-
-  
 }

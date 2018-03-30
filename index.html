@@ -102,7 +102,6 @@
                 <option value="button" selected>Button</option>
                 <option value="subscriptionList">Single Subscription</option>
                 <option value="textInput">Text Input</option>
-                <!-- <option value="2_button">2 Buttons</option> -->
             </select>
             <div class="form-container"></div>
             <button class="dialog-save btn-primary">Save</button>
@@ -127,20 +126,39 @@
     </div>    
 </div>
 
+<!-- Edit Widget dialog -->
+<div id="dialog-widget-edit" class="dialog hidden">
+    <div class="dialog-top">
+        <div class="dialog-title">Edit Widget</div>
+        <div class="dialog-close">
+            <button class="btn-icon btn-icon__inverted">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="dialog-body">
+        <form>
+            <div class="form-container"></div>
+            <button class="dialog-save btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
 <script src="libs/mqtt.js"></script>
 <script src="utils.js"></script>
 <script src="storage.js"></script>
 <script src="connection.js"></script>
-<script src="dialogs/widgetFormsConfig.js"></script>
 <script src="dialogs/dialog.js"></script>
 <script src="dialogs/widgetCreateDialog.js"></script>
+<script src="dialogs/widgetEditDialog.js"></script>
 <script src="dialogs/dashboardCreateDialog.js"></script>
 <script src="widgets/widget.js"></script>
 <script src="widgets/buttonWidget.js"></script>
 <script src="widgets/subscriptionListWidget.js"></script>
 <script src="widgets/textInputWidget.js"></script>
+<script src="dialogs/widgetsConfig.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

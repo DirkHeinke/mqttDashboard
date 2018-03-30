@@ -1,3 +1,6 @@
+// Save instances of widgets by id
+var WIDGETS = {};
+
 function loadConnections() {
   var $connectionContainer = $('#saved_connections');
   var items = $connectionContainer.find('.saved-connection');
@@ -94,7 +97,6 @@ function connect(id) {
     console.log('[connect] Connection established');
     hideConnectionError();
     openDashboard();
-    // loadWidgets();
     updateConnectionInTopBar();
     emptyConnectionForm();
     loadConnections();
@@ -140,10 +142,15 @@ function openWidgetCreateDialog() {
 }
 
 function saveWidget(widget) {
-  console.log('save widget', widget)
   var widgetId = storageService.widgets.save(widget);
+  createWidget(widgetId);
   addWidgetToDashboard(widgetId);
-  loadWidgets();
+}
+
+function onUpdateWidget(widgetId, updatedWidget) {
+  storageService.widgets.update(widgetId, updatedWidget);
+
+  updateWidget(widgetId);
 }
 
 function openDashboardCreateDialog() {
@@ -168,7 +175,6 @@ function createDashboard(name) {
 }
 
 function loadDashboards() {
-  console.log('Load Dashboards');
   var dashboards = storageService.dashboards.getAll();
   if(Object.keys(dashboards).length === 0) {
     createDashboard("Default");
@@ -247,7 +253,6 @@ function addWidgetToDashboard(widgetId) {
 }
 
 function onWidgetRemove(widgetId, elemId) {
-  console.log('Remove', widgetId, elemId);
   var state = storageService.state.get();
   var currentDashboardId = state.currentDashboardId;
   var dashboard = storageService.dashboards.get(currentDashboardId);
@@ -260,8 +265,10 @@ function onWidgetRemove(widgetId, elemId) {
   $(`#${elemId}`).remove();
 }
 
-function onWidgetSave() {
-  loadWidgets();
+function openEditWidgetDialog(widgetId) {
+  var editWidgetDialog = new WidgetEditDialog('#dialog-widget-edit', onUpdateWidget);
+  var widgetData = storageService.widgets.get(widgetId);
+  editWidgetDialog.open(widgetId, widgetData);
 }
 
 function getCurrentConnectionId() {
@@ -270,34 +277,38 @@ function getCurrentConnectionId() {
 }
 
 function loadWidgets() {
-  console.log('loadwidgets');
 
   var currentDashboardId = getCurrentDashboardId();
   var dashboardWidgets = storageService.widgets.getByDashboardId(currentDashboardId);
+  
+  clearWidgets();
+
+  Object.keys(dashboardWidgets).forEach(createWidget);
+}
+
+function clearWidgets() {
   var $widgetsContainer = $('#widgets-container');
 
-  if($widgetsContainer.find('.widget').length > 0) {
-    $widgetsContainer.empty();
+  if (!$widgetsContainer.find('.widget').length) {
+    return;
   }
 
-  Object.keys(dashboardWidgets).forEach(function(widgetId) {
-    var type = dashboardWidgets[widgetId].type;
-    switch(type) {
-      case 'button':
-        new ButtonWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
-        break;
-      case 'subscriptionList':
-        new SubscriptionListWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
-        break;
-      case 'textInput':
-        new TextInputWidget($widgetsContainer, widgetId, onWidgetSave, onWidgetRemove);
-        break;
-      default:
-        console.error("Unknown Widget type not loaded");
-    }
+  $widgetsContainer.empty();
+}
 
+function createWidget(widgetId) {
+  var $widgetsContainer = $('#widgets-container');
+  var widgetData = storageService.widgets.get(widgetId);
+  var type = widgetData.type;
+  var Widget = WIDGETS_CONFIG[type];
+  var widget = new Widget($widgetsContainer, widgetId, widgetData, onWidgetRemove, openEditWidgetDialog);
+  WIDGETS[widgetId] = widget;
+}
 
-  });
+function updateWidget(widgetId) {
+  var widgetInstance = WIDGETS[widgetId];
+  var widgetData = storageService.widgets.get(widgetId);
+  widgetInstance.refresh(widgetData);
 }
 
 function hideConnectionError() {
@@ -357,8 +368,6 @@ function init() {
   if(currentDashboardId) {
     activateDashboard(currentDashboardId);
   }
-
-  
 }
 
 

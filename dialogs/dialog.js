@@ -9,7 +9,6 @@ class Dialog {
   }
 
   open() {
-    this.clear();
     this.$elem.show();
   }
 

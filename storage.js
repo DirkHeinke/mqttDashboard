@@ -110,8 +110,6 @@ var storageService = (function(_) {
     connections[id] = updatedConnection;
     _save(STORAGE_KEYS.CONNECTIONS, connections);
     return updatedConnection;
-
-
   }
 
   function updateDashboard(id, data) {
@@ -128,7 +126,17 @@ var storageService = (function(_) {
   }
 
   function updateWidget(id, data) {
+    var widgets = _get(STORAGE_KEYS.WIDGETS);
 
+    if (!widgets[id]) {
+      var newId = saveWidget(data);
+      return widgets[newId];
+    }
+
+    var updatedWidget = Object.assign(widgets[id], data);
+    widgets[id] = updatedWidget;
+    _save(STORAGE_KEYS.WIDGETS, widgets);
+    return updatedWidget;
   }
 
   function getWidget(id) {
