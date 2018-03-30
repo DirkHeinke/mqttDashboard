@@ -7,6 +7,14 @@ function loadConnections() {
     $connectionContainer.empty();
   }
 
+  console.log(connections)
+  if(Object.keys(connections).length === 0) {
+    // no connection, add default
+    console.log("Adding default connection")
+    storageService.connections.save({url: "broker.mqttdashboard.com", port: "8000", username: "", password: ""})
+    connections = storageService.connections.getAll();
+  }
+
   Object.keys(connections).forEach(function(id) {
     var connection = connections[id];
 
@@ -41,6 +49,7 @@ function loadConnection(id) {
 }
 
 function closeConnection() {
+  connectionService.getClient().end();
   var state = {currentConnectionId: ''}
   storageService.state.set(state);
   closeDashboard();
@@ -101,13 +110,27 @@ function connect(id) {
     loadDashboards();
   });
 
-  client.on('close', function(err) {
-    console.log('[connect] Connection failed');
-    showConnectionError('Could not connect to broker!');
+  client.on('error', function(err) {
+    console.log('[connect] Connection failed', err);
+    if(err.code == 4 || err.code == 5) {
+      showConnectionError('Not Authorized!');
+    } else {
+      showConnectionError('Could not connect to broker!');
+    }
     storageService.state.set({
       currentConnectionId: ""
     });
   });
+
+  client.stream.on('error', function(err) {
+    console.log('[connect] Stream Error', err);
+    console.log(err)
+    showConnectionError('Could not connect to broker!');
+    storageService.state.set({
+      currentConnectionId: ""
+    });
+  })
+
 }
 
 function updateAndConnect(id) {
