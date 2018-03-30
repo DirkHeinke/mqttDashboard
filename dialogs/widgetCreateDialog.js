@@ -8,9 +8,6 @@ class WidgetCreateDialog extends Dialog {
 
     this.$saveBtn.on('click', this.save.bind(this));
     $widgetTypeSelect.on('change', this.onTypeChange.bind(this));
-
-    // Globally available;
-    this.forms = WIDGET_FORMS_CONFIG;
     
     this.onTypeChange();
   }
@@ -22,7 +19,8 @@ class WidgetCreateDialog extends Dialog {
 
   onTypeChange() {
     var widgetType = this.$widgetTypeSelect.val();
-    var formConfig = this.forms[widgetType];
+    
+    var formConfig = WIDGETS_CONFIG[widgetType].form;
     var $formContainer = this.$elem.find('.form-container');
 
     $formContainer.empty();
@@ -50,7 +48,7 @@ class WidgetCreateDialog extends Dialog {
     };
 
     var widgetType = this.$widgetTypeSelect.val();
-    var formConfig = this.forms[widgetType];
+    var formConfig = WIDGETS_CONFIG[widgetType].form;
 
     formConfig.forEach(function (formItem) {
       var value = $form.find(`.${formItem.cls}`).val();
