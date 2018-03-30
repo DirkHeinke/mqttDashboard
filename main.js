@@ -7,7 +7,6 @@ function loadConnections() {
     $connectionContainer.empty();
   }
 
-  console.log(connections)
   if(Object.keys(connections).length === 0) {
     // no connection, add default
     console.log("Adding default connection")
@@ -112,7 +111,7 @@ function connect(id) {
 
   client.on('error', function(err) {
     console.log('[connect] Connection failed', err);
-    if(err.code == 4 || err.code == 5) {
+    if(err.code === 4 || err.code === 5) {
       showConnectionError('Not Authorized!');
     } else {
       showConnectionError('Could not connect to broker!');
@@ -124,7 +123,6 @@ function connect(id) {
 
   client.stream.on('error', function(err) {
     console.log('[connect] Stream Error', err);
-    console.log(err)
     showConnectionError('Could not connect to broker!');
     storageService.state.set({
       currentConnectionId: ""
