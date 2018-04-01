@@ -277,14 +277,17 @@ body, html {
 
 #dashboards-list .dashboard-name {
   flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
-#dashboards-list .dashboard-name > span {
+#dashboards-list .dashboard-name .active {
+  font-size: 0.625em;
+  padding: 3px 5px;
+  background: #98b20a;
   color: white;
-  font-size: 0.875em;
-  margin-left: 8px;
-  background: #4ac952;
-  padding: 5px;
+  margin-left: 16px;
+  border-radius: 3px;
 }
 
 

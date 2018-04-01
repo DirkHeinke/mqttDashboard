@@ -227,7 +227,7 @@ function loadDashboards() {
     
     var tpl = `
       <div class="dashboard">
-          <div class="dashboard-name">${dashboard.name}<span class="${cls}">ACTIVE</span></div>
+          <div class="dashboard-name">${dashboard.name}<div class="active ${cls}">ACTIVE</div></div>
           <div class="dashboard-actions">
               <button onclick="deleteDashboard(${id})" class="btn-icon" title="delete"><i class="fas fa-trash"></i></button>
               <button onclick="activateDashboard(${id})" class="btn-icon" title="load"><i class="fas fa-arrow-circle-right"></i></button>
