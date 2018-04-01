@@ -59,8 +59,10 @@
 <!-- The actual dashboard page -->
 <div class="page" id="dashboard">
     <div class="dashboard-top">
-        <h1>Dashboard</h1>
-        <div>Connection: <span id="connection-current"></span></div>
+        <div>
+            <i class="fas fa-globe"></i>
+            <span id="connection-current"></span>
+        </div>
         <button onclick="closeConnection()" class="btn-primary btn-icon-before"><i class="fas fa-sign-out-alt"></i>Close connection</button>
     </div>
     <div class="dashboard-container">
@@ -76,7 +78,11 @@
             </div>
         </div>
         <div class="dashboard-main">
-            <button onclick="openWidgetCreateDialog()" class="btn-primary btn-icon-before"><i class="fa fa-plus"></i>ADD WIDGET</button>
+            <div class="dashboard-info">
+                <h3 id="current-dashboard">Dashboard</h3>
+                <button onclick="openWidgetCreateDialog()" class="btn-primary btn-icon-before"><i class="fa fa-plus"></i>ADD WIDGET</button>
+            </div>
+            
             <div id="widgets-container">
                 <!-- Widgets go here -->
             </div>
