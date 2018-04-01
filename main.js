@@ -203,11 +203,13 @@ function createDashboard(name) {
 
 function loadDashboards() {
   var dashboards = storageService.dashboards.getAll();
+
   if(Object.keys(dashboards).length === 0) {
     createDashboard("Default");
     loadDashboards();
     return;
   }
+
   var state = storageService.state.get();
   var currentDashboardId = state.currentDashboardId;
 
@@ -220,8 +222,9 @@ function loadDashboards() {
 
   Object.keys(dashboards).forEach(function(id) {
     var dashboard = dashboards[id];
-    // var cls = id !== currentDashboardId ? 'hidden' : '';
-    var cls = 'hidden';
+    
+    var cls = parseInt(id) !== currentDashboardId ? 'hidden' : '';
+    
     var tpl = `
       <div class="dashboard">
           <div class="dashboard-name">${dashboard.name}<span class="${cls}">ACTIVE</span></div>
@@ -262,8 +265,9 @@ function activateDashboard(id) {
 
   storageService.state.set({currentDashboardId: parseInt(id)});
   var dashboard = storageService.dashboards.get(id);
-  $('#dashboard .dashboard-top h1').text(dashboard.name);
+  $('#dashboard .dashboard-info h3').text(dashboard.name);
   loadWidgets();
+  loadDashboards();
 }
 
 function getCurrentDashboardId() {
