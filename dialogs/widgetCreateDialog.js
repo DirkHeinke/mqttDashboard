@@ -47,7 +47,6 @@ class WidgetCreateDialog extends Dialog {
       type: widgetType,
     };
 
-    var widgetType = this.$widgetTypeSelect.val();
     var formConfig = WIDGETS_CONFIG[widgetType].form;
 
     formConfig.forEach(function (formItem) {
