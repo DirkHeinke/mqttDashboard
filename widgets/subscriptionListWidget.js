@@ -22,7 +22,7 @@ class SubscriptionListWidget extends Widget {
     this.tpl = `
       <div class="widget widget__scrollable" id="widget_{0}">
         <div class="widget-title">
-            <div class="widget-name">{1}</div>
+            <div class="widget-name"><span class="uppercase bold">{1}</span> - <span>#{3}</span></div>
             <div class="widget-actions">
                 <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
                 <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
@@ -44,7 +44,7 @@ class SubscriptionListWidget extends Widget {
     var topicChanged = newTopic !== oldTopic;
 
     this.widgetData = data;
-    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel], { refresh: true });
+    this._render(data, { refresh: true });
     if(topicChanged) {
       this._subscribe(newTopic);
     }
@@ -52,11 +52,14 @@ class SubscriptionListWidget extends Widget {
 
   init() {
     var data = this.widgetData;
-
-    // Order of items in array is important
-    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel]);
+    this._render(this.widgetData);
     this._subscribe(data.topic);
     this._setupMessageHandler();
+  }
+
+  _render(data, opts) {
+    // Order of items in array is important
+    super.render(this.tpl, [this.widgetId, data.title, data.btnLabel, data.topic], opts);
   }
 
   _subscribe(topic) {

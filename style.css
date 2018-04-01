@@ -172,8 +172,6 @@ body, html {
   padding: 8px;
   display: flex;
   font-size: 0.75em;
-  text-transform: uppercase;
-  font-weight: bold;
   align-items: center;
 }
 
@@ -373,4 +371,8 @@ button.btn-icon:hover {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.bold {
+  font-weight: bold;
 }
