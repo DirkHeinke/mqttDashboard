@@ -1,6 +1,7 @@
 class Dialog {
   constructor(id) {
     this.$elem = $(id);
+    this.$overlay = $('#dialog-overlay');
 
     this.$closeBtn = this.$elem.find('.dialog-close > button');
     this.$saveBtn = this.$elem.find('.dialog-save');
@@ -9,11 +10,13 @@ class Dialog {
   }
 
   open() {
+    this.$overlay.show();
     this.$elem.show();
   }
 
   close() {
     this.$elem.hide();
+    this.$overlay.hide();
   }
   
   clear() {
