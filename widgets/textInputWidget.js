@@ -22,7 +22,7 @@ class TextInputWidget extends Widget {
     this.tpl = `
       <div class="widget" id="widget_{0}">
         <div class="widget-title">
-          <div class="widget-name"><span class="uppercase bold">{1}</span> - <span>#{3}</span></div>
+          <div class="widget-name"><span class="uppercase bold">{1}</span> - <span>{3}</span></div>
           <div class="widget-actions">
             <button class="widget-edit btn-icon" title="edit"><i class="far fa-edit"></i></button>
             <button class="widget-delete btn-icon" title="delete"><i class="fas fa-trash"></i></button>
