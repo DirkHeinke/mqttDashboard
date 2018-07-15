@@ -21,6 +21,8 @@ body, html {
   height: 500px;
   display: flex;
   border: 1px solid #969696;
+  background: #f0f0f0;
+  box-shadow: 0px 0px 3px 1px #dedede;
 }
 
 .connection_new {
