@@ -81,7 +81,7 @@ class SubscriptionListWidget extends Widget {
       return;
     }
 
-    var timeNow = new Date().toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit'});
+    var timeNow = new Date().toLocaleTimeString("de-DE", {hour: '2-digit', minute:'2-digit', second: '2-digit'});
     $messageContainer.prepend(`<div class="msg"><div class="topic">Topic: "${topic}"</div><div class="time">${timeNow}</div><div class="payload">${message}</div></div>`);
   }
 
