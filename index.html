@@ -42,7 +42,7 @@
                 <input type="checkbox" id="connect_secure">
             </div>
         </form>
-        <button onclick="connect()" id="button_connect" class="btn-primary">Connect</button>
+        <button onclick="connect()" id="button_connect" class="btn-primary"><i class="fas fa-arrow-circle-right"></i> Connect</button>
         <button onclick="updateAndConnect()" id="button_updateAndConnect" class="hidden btn-primary">Update & Connect</button>
         <button onclick="cancelUpdateConnection()" id="button_updateCancel" class="hidden btn-primary">Cancel</button>
 
@@ -59,8 +59,10 @@
 <!-- The actual dashboard page -->
 <div class="page" id="dashboard">
     <div class="dashboard-top">
-        <h1>Dashboard</h1>
-        <div>Connection: <span id="connection-current"></span></div>
+        <div>
+            <i class="fas fa-globe"></i>
+            <span id="connection-current">Connecting...</span>
+        </div>
         <button onclick="closeConnection()" class="btn-primary btn-icon-before"><i class="fas fa-sign-out-alt"></i>Close connection</button>
     </div>
     <div class="dashboard-container">
@@ -76,7 +78,11 @@
             </div>
         </div>
         <div class="dashboard-main">
-            <button onclick="openWidgetCreateDialog()" class="btn-primary btn-icon-before"><i class="fa fa-plus"></i>ADD WIDGET</button>
+            <div class="dashboard-info">
+                <h3 id="current-dashboard">Dashboard</h3>
+                <button onclick="openWidgetCreateDialog()" class="btn-primary btn-icon-before"><i class="fa fa-plus"></i>ADD WIDGET</button>
+            </div>
+            
             <div id="widgets-container">
                 <!-- Widgets go here -->
             </div>
@@ -143,6 +149,8 @@
         </form>
     </div>
 </div>
+
+<div id="dialog-overlay" class="hidden"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
