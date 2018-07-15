@@ -200,6 +200,7 @@ body, html {
   overflow-y: auto;
   color: #98B209;
   font-size: 0.875em;
+  height: 100%;
 }
 
 .widget__scrollable .msg-container .msg {
